@@ -39,7 +39,9 @@ class RaisingIndex:
         raise RuntimeError("boom")
 
 
-def test_missing_config_returns_empty_results_and_logs_warning(caplog):
+def test_missing_config_returns_empty_results_and_logs_warning(monkeypatch, caplog):
+    monkeypatch.setenv("PINECONE_API_KEY", "env-key")
+    monkeypatch.setenv("PINECONE_INDEX", "env-index")
     client = PineconeMemoryClient(api_key="", index_name="", fail_open=True)
 
     with caplog.at_level("WARNING"):
@@ -47,6 +49,7 @@ def test_missing_config_returns_empty_results_and_logs_warning(caplog):
         assert client.query([0.1, 0.2]) == []
         assert client.delete_by_source(source_kind="file", source_id="abc") == 0
 
+    assert client.is_configured() is False
     assert "missing configuration" in caplog.text
 
 

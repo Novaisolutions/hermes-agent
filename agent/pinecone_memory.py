@@ -21,9 +21,9 @@ class PineconeMemoryClient:
         sdk_client: Any | None = None,
         index: Any | None = None,
     ) -> None:
-        self.api_key = api_key or os.getenv("PINECONE_API_KEY", "")
-        self.index_name = index_name or os.getenv("PINECONE_INDEX", "")
-        self.namespace = namespace or os.getenv("PINECONE_NAMESPACE", "hermes")
+        self.api_key = api_key if api_key is not None else os.getenv("PINECONE_API_KEY", "")
+        self.index_name = index_name if index_name is not None else os.getenv("PINECONE_INDEX", "")
+        self.namespace = namespace if namespace is not None else os.getenv("PINECONE_NAMESPACE", "hermes")
         self.top_k = top_k
         self.fail_open = fail_open
         self._sdk_client = sdk_client
